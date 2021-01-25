@@ -31,10 +31,16 @@ RUN mkdir -p ~/ws_cam_survey/src && cd ~/ws_cam_survey/src && \
   cd ~/ws_cam_survey/src/deep_grasp_demo && \
     git remote add jstech https://github.com/JStech/deep_grasp_demo.git && git fetch jstech && \
     git checkout fix-opencv-cmakelists && \
+  cd ~/ws_cam_survey/src/moveit_task_constructor && \
+    git remote add jstech https://github.com/JStech/moveit_task_constructor.git && git fetch jstech && \
+    git checkout jstech/pr-deep_grasp_stage && \
   cd ~/ws_cam_survey/src && \
   git clone https://github.com/ros-planning/moveit_calibration && \
-  git clone https://github.com/ros-industrial/universal_robot && \
+  git clone -b calibration_devel https://github.com/fmauch/universal_robot fmauch_universal_robot && \
+  git clone https://github.com/UniversalRobots/Universal_Robots_ROS_Driver && \
   rosdep update && rosdep install -y --from-paths . --ignore-src --rosdistro noetic
+
+RUN apt install ros-noetic-rviz
 
 RUN cd ~/ws_cam_survey && catkin config --extend /opt/ros/noetic --cmake-args -DCMAKE_BUILD_TYPE=Release \
   -DOpenCV_DIR=/usr/lib/x86_64-linux-gnu/cmake && \
