@@ -20,7 +20,7 @@ RUN cd ~ && \
   cmake .. && make -j 4 && \
   make install
 
-# Get MTC
+# Get MTC, deep grasp demo, MoveIt Calibration, and UR drivers
 RUN mkdir -p ~/ws_cam_survey/src && cd ~/ws_cam_survey/src && \
   wstool init . && \
   wstool merge -t . https://raw.githubusercontent.com/ros-planning/moveit/master/moveit.rosinstall && \
@@ -32,13 +32,10 @@ RUN mkdir -p ~/ws_cam_survey/src && cd ~/ws_cam_survey/src && \
     git remote add jstech https://github.com/JStech/deep_grasp_demo.git && git fetch jstech && \
     git checkout fix-opencv-cmakelists && \
   cd ~/ws_cam_survey/src && \
-  rosdep install -y --from-paths . --ignore-src --rosdistro noetic
+  git clone https://github.com/ros-planning/moveit_calibration && \
+  git clone https://github.com/ros-industrial/universal_robot && \
+  rosdep update && rosdep install -y --from-paths . --ignore-src --rosdistro noetic
 
 RUN cd ~/ws_cam_survey && catkin config --extend /opt/ros/noetic --cmake-args -DCMAKE_BUILD_TYPE=Release \
   -DOpenCV_DIR=/usr/lib/x86_64-linux-gnu/cmake && \
   catkin build
-
-
-# TODO
-# install UR drivers
-# install MoveIt Calibration
