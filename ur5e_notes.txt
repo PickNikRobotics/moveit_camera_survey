@@ -1,0 +1,15 @@
+Network
+-------
+  - Robot IP: 10.0.1.186
+  - 20.04 ip: 10.0.1.182
+  - 18.04 ip: 10.0.1.112
+
+Start docker image with host networking and GUI
+-----------------------------------------------
+  host> xhost +
+  host> docker run -it --name cam-survey --network host -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix jstechschulte/moveit-camera-survey:base
+
+Launch robot
+------------
+  docker> roslaunch ur_robot_driver ur5e_bringup.launch robot_ip:=10.0.1.186 kinematics_config:=$HOME/ur5e_cal.yaml
+  docker> rosrun rqt_joint_trajectorY_controller rqt_joint_trajectorY_controller

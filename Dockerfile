@@ -9,8 +9,11 @@ RUN apt update && apt install -y \
   libpcl-dev \
   python3-catkin-tools \
   python3-pip \
+  tmux \
   vim \
   && pip3 install osrf-pycommon
+
+COPY tmux.conf /root/.tmux.conf
 
 # Install GPD
 RUN cd ~ && \
@@ -45,3 +48,5 @@ RUN apt install ros-noetic-rviz
 RUN cd ~/ws_cam_survey && catkin config --extend /opt/ros/noetic --cmake-args -DCMAKE_BUILD_TYPE=Release \
   -DOpenCV_DIR=/usr/lib/x86_64-linux-gnu/cmake && \
   catkin build
+
+COPY ur5e_cal.yaml /root/ur5e_cal.yaml
