@@ -39,8 +39,9 @@ RUN mkdir -p ~/ws_cam_survey/src && cd ~/ws_cam_survey/src && \
     git checkout jstech/pr-deep_grasp_stage && \
   cd ~/ws_cam_survey/src && \
   git clone https://github.com/ros-planning/moveit_calibration && \
-  git clone -b calibration_devel https://github.com/fmauch/universal_robot fmauch_universal_robot && \
+  git clone -b calibration_devel https://github.com/JStech/universal_robot universal_robot && \
   git clone https://github.com/UniversalRobots/Universal_Robots_ROS_Driver && \
+  git clone https://github.com/JStech/robotiq -b noetic-mods && \
   rosdep update && rosdep install -y --from-paths . --ignore-src --rosdistro noetic
 
 RUN apt install ros-noetic-rviz
