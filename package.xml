@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>moveit_camera_survey</name>
+  <version>2021.2.0</version>
+  <description>Mostly launch files for running camera survey</description>
+  <maintainer email="john@picknik.ai">John Stechschulte</maintainer>
+  <license>BSD</license>
+</package>
