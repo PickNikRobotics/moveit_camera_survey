@@ -1,4 +1,4 @@
-FROM ros:noetic-ros-base
+FROM osrf/ros:noetic-desktop-full
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -16,8 +16,8 @@ RUN apt update && apt install -y \
 COPY tmux.conf /root/.tmux.conf
 
 # Install GPD
-RUN cd ~ && \
-  git clone https://github.com/atenpas/gpd && \
+WORKDIR /root
+RUN git clone https://github.com/atenpas/gpd && \
   mkdir -p gpd/build && \
   cd gpd/build && \
   cmake .. && make -j 4 && \
@@ -29,21 +29,27 @@ RUN mkdir -p ~/ws_cam_survey/src && cd ~/ws_cam_survey/src && \
   wstool merge -t . https://raw.githubusercontent.com/ros-planning/moveit/master/moveit.rosinstall && \
   wstool merge -t . https://raw.githubusercontent.com/ros-planning/moveit_task_constructor/master/.rosinstall && \
   wstool merge -r -y -t . https://raw.githubusercontent.com/PickNikRobotics/deep_grasp_demo/master/.rosinstall && \
-  wstool update && \
-  touch ~/ws_cam_survey/src/deep_grasp_demo/moveit_task_constructor_dexnet/CATKIN_IGNORE && \
-  cd ~/ws_cam_survey/src/deep_grasp_demo && \
-    git remote add jstech https://github.com/JStech/deep_grasp_demo.git && git fetch jstech && \
-    git checkout fix-opencv-cmakelists && \
-  cd ~/ws_cam_survey/src/moveit_task_constructor && \
-    git remote add jstech https://github.com/JStech/moveit_task_constructor.git && git fetch jstech && \
-    git checkout jstech/pr-deep_grasp_stage && \
-  cd ~/ws_cam_survey/src && \
-  git clone https://github.com/ros-planning/moveit_calibration && \
-  git clone -b calibration_devel https://github.com/JStech/universal_robot universal_robot && \
+  wstool update
+
+# Set up MoveIt Cal, UR, Robotiq, this repo
+WORKDIR /root/ws_cam_sruvey/src
+RUN git clone https://github.com/ros-planning/moveit_calibration && \
   git clone https://github.com/UniversalRobots/Universal_Robots_ROS_Driver && \
+  git clone -b calibration_devel https://github.com/JStech/universal_robot universal_robot && \
   git clone https://github.com/JStech/robotiq_85_gripper && \
-  git clone https://github.com/PickNikRobotics/camera_survey && \
-  rosdep update && rosdep install -y --from-paths . --ignore-src --rosdistro noetic
+  git clone https://github.com/PickNikRobotics/moveit_camera_survey
+
+# Get the right branches
+WORKDIR /root/ws_cam_survey/src/deep_grasp_demo
+RUN touch moveit_task_constructor_dexnet/CATKIN_IGNORE && \
+  git remote add jstech https://github.com/JStech/deep_grasp_demo.git && git fetch jstech && \
+  git checkout fix-opencv-cmakelists
+WORKDIR /root/ws_cam_survey/src/moveit_task_constructor
+RUN git remote add jstech https://github.com/JStech/moveit_task_constructor.git && git fetch jstech && \
+  git checkout jstech/pr-deep_grasp_stage
+
+# Get everything else from rosdep
+RUN rosdep update && rosdep install -y --from-paths . --ignore-src --rosdistro noetic
 
 RUN apt install ros-noetic-rviz
 
