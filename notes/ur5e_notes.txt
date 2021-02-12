@@ -12,4 +12,5 @@ Start docker image with host networking and GUI
 Launch robot
 ------------
   docker> roslaunch ur_robot_driver ur5e_bringup.launch robot_ip:=10.0.1.186 kinematics_config:=$HOME/ur5e_cal.yaml
-  docker> rosrun rqt_joint_trajectorY_controller rqt_joint_trajectorY_controller
+  docker> rosrun rqt_joint_trajectory_controller rqt_joint_trajectory_controller
+  docker> roslaunch ur5_e_moveit_config moveit_rviz

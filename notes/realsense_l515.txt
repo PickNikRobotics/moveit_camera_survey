@@ -1,0 +1,11 @@
+Package realsense2_camera is released on Noetic
+
+ROS node starts up fine at 640x480, but changing the resolution results in no images and no errors
+
+works: roslaunch realsense2_camera rs_camera.launch
+doesn't work: roslaunch realsense2_camera rs_camera.launch depth_width:=1024 depth_height:=768 color_width:=1920 color_height:=1080
+doesn't work: roslaunch realsense2_camera rs_camera.launch depth_width:=1024 depth_height:=768 color_width:=1024 color_height:=768
+
+printing USB errors:
+ 12/02 10:55:50,418 WARNING [140670782142208] (messenger-libusb.cpp:42) control_transfer returned error, index: 768, error: No data available, number: 61
+
