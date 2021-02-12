@@ -32,7 +32,7 @@ RUN mkdir -p ~/ws_cam_survey/src && cd ~/ws_cam_survey/src && \
   wstool update
 
 # Set up MoveIt Cal, UR, Robotiq, this repo
-WORKDIR /root/ws_cam_sruvey/src
+WORKDIR /root/ws_cam_survey/src
 RUN git clone https://github.com/ros-planning/moveit_calibration && \
   git clone https://github.com/UniversalRobots/Universal_Robots_ROS_Driver && \
   git clone -b calibration_devel https://github.com/JStech/universal_robot universal_robot && \
@@ -49,6 +49,7 @@ RUN git remote add jstech https://github.com/JStech/moveit_task_constructor.git 
   git checkout jstech/pr-deep_grasp_stage
 
 # Get everything else from rosdep
+WORKDIR /root/ws_cam_survey
 RUN rosdep update && rosdep install -y --from-paths . --ignore-src --rosdistro noetic
 
 RUN apt install ros-noetic-rviz
